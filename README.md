@@ -103,7 +103,7 @@ NB: Sign yourself up for a project group in Canvas->people->groups.
 
 **IMPORTANT: It is essential that you correctly set up the Python working environment by the end of the first week of the course so there are no delays in the work on the practicals.**
 
-To get started, carefully follow the instructions [here](https://8dc00-mia-docs.readthedocs.io/en/latest/reader/0.1_Software_guide.html).
+To get started, carefully follow the instructions [here](https://github.com/tueimage/8BE030-MIA/blob/main/reader/0.1_Software_guide.ipynb).
 
 ## Assessment
 
