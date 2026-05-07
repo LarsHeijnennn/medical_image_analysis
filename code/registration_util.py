@@ -43,10 +43,21 @@ def t2h(T, t):
     # Output:
     # Th - homogeneous transformation matrix
 
-    #------------------------------------------------------------------#
-    # TODO: Implement conversion of a transformation matrix and a translation vector to homogeneous transformation matrix.
-	pass
-    #------------------------------------------------------------------#
+    Th = np.eye(3)
+    Th[:2, :2] = T
+    Th[:2, 2] = t
+
+    return Th
+
+
+def h2c(Xh):
+    # Convert homogeneous to cartesian coordinates.
+    # Input:
+    # Xh - homogeneous coordinates
+    # Output:
+    # X - cartesian coordinates
+
+    return Xh[:-1, :] / Xh[-1:, :]
 
 def plot_object(ax, X):
     # Plot 2D object.
