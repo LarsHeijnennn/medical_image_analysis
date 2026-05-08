@@ -1,1 +1,61 @@
+# macOS
 .DS_Store
+
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variables
+.env
+.env.*
+
+# Python cache / build files
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+build/
+dist/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDEs
+.vscode/
+.idea/
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checking
+.mypy_cache/
+.pyre/
+.ruff_cache/
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# ML / medical imaging outputs
+outputs/
+checkpoints/
+runs/
+logs/
+results/
+models/
+
+# Large datasets
+data/
+datasets/
+
+# MONAI / PyTorch artifacts
+*.pt
+*.pth
+*.ckpt
