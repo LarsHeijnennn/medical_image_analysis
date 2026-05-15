@@ -150,7 +150,7 @@ def intensity_based_registration(I, Im, method='rigid_cc', num_iter = 200, mu = 
         case 'affine_mi':
             fun = lambda x: reg.affine_mi(I, Im, x, return_transform=False)
             x = np.array([0., 1., 1., 0., 0., 0., 0.])
-            y_lim = (0,5)
+            y_lim = (0,1)
             SCALING = 100
         case _:
             print('invalid method chosen')
