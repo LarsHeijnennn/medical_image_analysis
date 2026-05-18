@@ -87,18 +87,6 @@ def intensity_based_registration_demo():
         display(fig)
 
 
-# def optimize(fun, x, num_iter, mu):
-
-#     similarity = np.full((num_iter,1), np.nan)
-
-#     for k in np.arange(num_iter):
-#         print(f'iteration {k+1}/{num_iter}')
-#         g = reg.ngradient(fun, x)
-#         x+= g*mu
-        
-#         similarity[k] = fun(x)
-
-#     return x, similarity
 def optimize(fun, x, num_iter, mu, tol=1e-6):
 
     similarity = np.full((num_iter,1), np.nan)
@@ -201,5 +189,6 @@ def intensity_based_registration(I, Im, method='rigid_cc', num_iter = 200, mu = 
     ax2.set_ylabel('Similarity')
     ax2.grid()
 
+    
 
 
