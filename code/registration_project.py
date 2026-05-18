@@ -201,5 +201,30 @@ def intensity_based_registration(I, Im, method='rigid_cc', num_iter = 200, mu = 
     ax2.set_ylabel('Similarity')
     ax2.grid()
 
+def generate_noisy_images():
+    noise_levels = [0, 1, 2]
+    layers = [1,2,3]
+    patients = [1,2,3,4,5]
+    scan_types = ['t1', 't2']
 
+    for patient in patients:
+        for layer in layers:
+            for scan_type in scan_types:
+                original_image_name = f'../data/dataset_brains/{patient}_{layer}_{scan_type}.tif'
+                original_image = plt.imread(original_image_name)
+                for noise_level in noise_levels:
+                    noise = np.random.normal(0,10*noise_level, original_image.shape)
+                    img_noised = np.clip(original_image+noise,0,255).astype(np.uint8)
+                    if scan_type == 't2':
+                        T = util.t2h(reg.identity(),np.array((120,120)))
+                        T = T.dot(util.t2h(reg.rotate(1/6*np.pi),np.array([0,0])))
+                        T = T.dot(util.t2h(reg.identity(),np.array((-120,-120))))
+                        img_noised, _ = reg.image_transform(img_noised,T)
+                    plt.imsave(f'../data/noisy_image_data/{patient}_{layer}_{scan_type}_{noise_level}.png', img_noised, cmap = 'gray')
+                    print(f'{patient}_{layer}_{scan_type}_{noise_level}.png is saved')
+                    
+
+
+
+    return
 
