@@ -52,7 +52,6 @@ results/
 models/
 
 # Large datasets
-data/
 datasets/
 
 # MONAI / PyTorch artifacts
