@@ -95,8 +95,6 @@ def optimize(fun, x, num_iter, mu, tol=1e-6):
 
     for k in range(num_iter):
 
-        print(f'iteration {k+1}/{num_iter}')
-
         x_old = x.copy()
 
         g = reg.ngradient(fun, x)
@@ -106,7 +104,9 @@ def optimize(fun, x, num_iter, mu, tol=1e-6):
         S_new = fun(x)
 
         similarity[k] = S_new
-
+        
+        print(f"Iteration {k+1}/{num_iter}, Similarity: {S_new:.4f}")
+        
         # stopping criteria
 
         param_change = np.linalg.norm(x - x_old)
