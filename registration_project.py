@@ -5,6 +5,7 @@ Project code for image registration topics.
 import numpy as np
 import matplotlib.pyplot as plt
 import registration as reg
+import registration_util as util
 from IPython.display import display, clear_output
 
 
@@ -101,60 +102,171 @@ def optimize(fun, x, num_iter, mu):
     return x, similarity
 
 
-def intensity_based_registration(I, Im, method='rigid_cc', num_iter = 200, mu = 0.001):
+def intensity_based_registration(
+    I,
+    Im,
+    method='rigid_cc',
+    num_iter=200,
+    mu=0.001
+):
+
+    SCALING = 100
+
     match method:
+
         case 'rigid_cc':
-            fun = lambda x: reg.rigid_corr(I, Im, x, return_transform = False)
-            x = [1., 1., 0]
+
+            fun = lambda x: reg.rigid_corr(
+                I,
+                Im,
+                x,
+                return_transform=False
+            )
+
+            x = np.array([0., 0., 0.])
+
             y_lim = (0,1)
+
         case 'affine_cc':
-            fun = lambda x: reg.affine_corr(I, Im,  x, return_transform=False)
-            x = [1., 0., 0., 0., 1., 0., 0., 0., 1.]
+
+            fun = lambda x: reg.affine_corr(
+                I,
+                Im,
+                x,
+                return_transform=False
+            )
+
+            x = np.array([
+                0.,  # rotation
+                1.,  # scale x
+                1.,  # scale y
+                0.,  # shear x
+                0.,  # shear y
+                0.,  # tx
+                0.   # ty
+            ])
+
             y_lim = (0,1)
+
         case 'affine_mi':
-            fun = lambda x: reg.affine_mi(I, Im, x, return_transform=False)
-            x = [1., 0., 0., 0., 1., 0., 0., 0., 1.]
+
+            fun = lambda x: reg.affine_mi(
+                I,
+                Im,
+                x,
+                return_transform=False
+            )
+
+            x = np.array([
+                0.,
+                1.,
+                1.,
+                0.,
+                0.,
+                0.,
+                0.
+            ])
+
             y_lim = (0,5)
+
         case _:
+
             print('invalid method chosen')
             return
-    
-    
 
+    # optimization
+    x, S = optimize(
+        fun,
+        x,
+        num_iter,
+        mu
+    )
 
-    x, S = optimize(fun, x, num_iter, mu)
-    
-    
-    
+    # final transformation
+    if len(x) == 3:
 
+        T = reg.rotate(x[0])
 
+        Th = util.t2h(
+            T,
+            x[1:] * SCALING
+        )
 
-    ### displaying the graphs
+    else:
 
+        T = (
+            reg.rotate(x[0])
+            .dot(reg.scale(x[1], x[2]))
+            .dot(reg.shear(x[3], x[4]))
+        )
+
+        Th = util.t2h(
+            T,
+            x[5:] * SCALING
+        )
+
+    # transformed image
+    Im_t, _ = reg.image_transform(
+        Im,
+        Th
+    )
+
+    # visualization
     fig = plt.figure(figsize=(14,6))
 
-    # fixed and moving image, and parameters
+    # overlay
     ax1 = fig.add_subplot(121)
 
-    # fixed image
-    im1 = ax1.imshow(I)
-    # moving image
-    im2 = ax1.imshow(I, alpha=0.7)
-    # parameters
-    txt = ax1.text(0.3, 0.95,
-        np.array2string(x, precision=5, floatmode='fixed'),
-        bbox={'facecolor': 'white', 'alpha': 1, 'pad': 10},
-        transform=ax1.transAxes)
-    
-    # 'learning' curve
-    ax2 = fig.add_subplot(122, xlim=(0, num_iter), ylim=y_lim)
+    ax1.imshow(I, cmap='gray')
 
-    iterations = np.arange(1, num_iter+1)
+    ax1.imshow(
+        Im_t,
+        cmap='magma',
+        alpha=0.5
+    )
 
-    ax2.plot(iterations, S, lw=2)
+    txt = ax1.text(
+        0.3,
+        0.95,
+        np.array2string(
+            x,
+            precision=5,
+            floatmode='fixed'
+        ),
+        bbox={
+            'facecolor': 'white',
+            'alpha': 1,
+            'pad': 10
+        },
+        transform=ax1.transAxes
+    )
+
+    # learning curve
+    ax2 = fig.add_subplot(
+        122,
+        xlim=(0, len(S)),
+        ylim=y_lim
+    )
+
+    iterations = np.arange(
+        1,
+        len(S)+1
+    )
+
+    ax2.plot(
+        iterations,
+        S,
+        lw=2
+    )
+
     ax2.set_xlabel('Iteration')
+
     ax2.set_ylabel('Similarity')
+
     ax2.grid()
 
+    plt.tight_layout()
 
+    plt.show()
 
+    return Im_t, x, S
