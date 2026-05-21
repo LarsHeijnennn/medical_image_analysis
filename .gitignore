@@ -44,11 +44,9 @@ tmp/
 temp/
 
 # ML / medical imaging outputs
-outputs/
 checkpoints/
 runs/
 logs/
-results/
 models/
 
 # Large datasets
