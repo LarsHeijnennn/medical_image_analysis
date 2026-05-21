@@ -105,7 +105,7 @@ def intensity_based_registration(I, Im, method='rigid_cc', num_iter = 200, mu = 
     match method:
         case 'rigid_cc':
             fun = lambda x: reg.rigid_corr(I, Im, x, return_transform = False)
-            x = [0.]*3
+            x = [1., 1., 0]
             y_lim = (0,1)
         case 'affine_cc':
             fun = lambda x: reg.affine_corr(I, Im,  x, return_transform=False)
