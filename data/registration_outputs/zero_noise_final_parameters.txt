@@ -1,7 +1,0 @@
-Noise label: zero noise
-Final affine parameter vector:
-[-0.0325621 ,  0.96565651,  1.01275067,  0.06813264,  0.03824368,
- -0.05361057, -0.0108706 ]
-
-Parameter order:
-rotation, scale_x, scale_y, shear_x, shear_y, translation_x_scaled, translation_y_scaled

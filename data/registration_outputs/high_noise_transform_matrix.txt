@@ -1,5 +1,0 @@
-Noise label: high noise
-Homogeneous transformation matrix:
-[[ 0.96585896,  0.08738826, -3.480962  ],
- [ 0.00832337,  1.00542078, -0.07923807],
- [ 0.        ,  0.        ,  1.        ]]
